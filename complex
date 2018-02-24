@@ -1,0 +1,78 @@
+#include <iostream>
+using namespace std;
+char a;
+int error = 0;
+struct complex_t {
+	complex_t()
+	{
+		real = 0.0f;
+		imag = 0.0f;
+	}
+	float real;
+	float imag;
+	std::istream & read(std::istream & stream)
+	{
+		if (stream >> a && a == '(' && stream >> real && stream >> a && a == ',' && stream >> imag && stream >> a && a == ')');
+		else { error = 1; }
+		return stream;
+	}
+	std::ostream & write(std::ostream & stream)
+	{
+		return cout << '(' << real << ',' << imag << ')' << endl;
+	}
+	complex_t add(complex_t other) const
+	{
+		complex_t l;
+		l.real = real + other.real;
+		l.imag = imag + other.imag;
+		return l;
+	}
+	complex_t sub(complex_t other) const
+	{
+		complex_t l;
+		l.real = real - other.real;
+		l.imag = imag - other.imag;
+		return l;
+	}
+	complex_t mul(complex_t other) const
+	{
+		complex_t l;
+		l.real = (real * other.real) - (imag * other.imag);
+		l.imag = (imag * other.real) + (real * other.imag);
+		return l;
+	}
+	complex_t div(complex_t other) const
+	{
+		complex_t l;
+		l.real = ((real * other.real) - (imag * other.imag)) / (other.real*other.real + other.imag*other.imag);
+		l.imag = ((imag * other.real) - (real * other.imag)) / (other.real*other.real + other.imag*other.imag);
+		return l;
+	}
+};
+complex_t l;
+int main() {
+	complex_t b, c, l; char op;
+	b.read(cin);
+	cin >> op;
+	c.read(cin);
+	if (error == 0) {
+		switch (op)
+		{
+		case '+':
+			b.add(c).write(cout);
+			break;
+		case '-':
+			b.sub(c).write(cout);
+            break;
+		case '*':
+			b.mul(c).write(cout);
+			break;
+		case '/':
+			b.div(c).write(cout);
+			break;
+		}
+	}
+	else cout << "An error has occured while reading input data" << endl;
+
+	return 0;
+}
